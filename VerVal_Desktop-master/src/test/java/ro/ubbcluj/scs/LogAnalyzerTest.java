@@ -1,10 +1,8 @@
+package ro.ubbcluj.scs;
+
 import org.junit.*;
 import org.mockito.Mockito;
 
-/**
- * @author <a href="mailto:annacs94@gmail.com">Kiss Anna</a>
- * @since 11.03.2016
- */
 public class LogAnalyzerTest {
 
     private static final String validLogFileName = "something.slr";
@@ -41,12 +39,6 @@ public class LogAnalyzerTest {
 
     }
 
-//    @Test(expected = IllegalArgumentException.class)
-//    public void isValidLogFileName_Empty_ExceptionThrow() {
-//        logAnalyzer.isValidLogFileName("");
-//    }
-
-
     @Test
     public void IsValidLogFileNameTestable_NotValid_ReturnFalse() {
         fileExtensionManager.setWillReturn(false);
@@ -61,7 +53,8 @@ public class LogAnalyzerTest {
 
     @Test
     public void isValiedLogFileName_FileNameTooShort_CallsWebService() {
-        logAnalyzer.isValidLogFileName("12");
+    	logAnalyzer.setWebService(webService);
+    	logAnalyzer.isValidLogFileName("12");
         Assert.assertEquals("should be too short", webService.getLastError(), "12 too short");
     }
 
@@ -70,7 +63,8 @@ public class LogAnalyzerTest {
         WebService mockedWebService = Mockito.mock(WebService.class);
         logAnalyzer.setWebService(mockedWebService);
         logAnalyzer.isValidLogFileName("12");
-        Mockito.verify(mockedWebService, Mockito.times(2)).logError("12 too short");
-
+        
+        Mockito.verify(mockedWebService, Mockito.times(1)).logError("12 too short");
     }
+    
 }
